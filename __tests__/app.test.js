@@ -43,4 +43,24 @@ describe("GET /api", () => {
             })
         })
     })
+    describe("/articles", () => {
+        describe("/:article_id", () => {
+            test("200: Should retrieve an article by id", () => {
+                return request(app)
+                .get('/api/articles/1')
+                .expect(200)
+                .then((res) => {
+                    console.log(res.body);
+                    expect(res.body.article).toHaveProperty("author", expect.any(String));
+                    expect(res.body.article).toHaveProperty("title", expect.any(String));
+                    expect(res.body.article).toHaveProperty("article_id", expect.any(Number));
+                    expect(res.body.article).toHaveProperty("body", expect.any(String));
+                    expect(res.body.article).toHaveProperty("topic", expect.any(String));
+                    expect(res.body.article).toHaveProperty("created_at", expect.any(String));
+                    expect(res.body.article).toHaveProperty("votes", expect.any(Number));
+                    expect(res.body.article).toHaveProperty("article_img_url", expect.any(String));
+                })
+            })
+        })
+    })
 })
