@@ -35,7 +35,8 @@ describe("GET /api", () => {
             .get('/api/topics')
             .expect(200)
             .then((res) => {
-                return res.body.forEach((topic) => {
+                expect(res.body.topics.length).not.toBe(0);
+                return res.body.topics.forEach((topic) => {
                     expect(topic).toHaveProperty("slug", expect.any(String));
                     expect(topic).toHaveProperty("description", expect.any(String));
                 })
