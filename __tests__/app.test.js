@@ -3,6 +3,7 @@ const db = require("../db/connection.js");
 const request = require("supertest");
 const seed = require('../db/seeds/seed.js');
 const testData = require('../db/data/test-data/index.js');
+const endpoints = require("../endpoints.json")
 
 beforeEach(() => seed(testData));
 
@@ -20,6 +21,14 @@ describe("General API error handling", () => {
 })
 
 describe("GET /api", () => {
+    test("200: Should respond with a JSON object detailing all available endpoints", () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then((res) => {
+            expect(res.body).toMatchObject(endpoints);
+        })
+    })
     describe("/topics", () => {
         test("200: Should respond with an array of topics with slugs and descriptions", () => {
             return request(app)
