@@ -14,8 +14,8 @@ describe("General API error handling", () => {
         return request(app)
         .get('/api/invalid')
         .expect(404)
-        .then((res) => {
-            expect(res.body.msg).toBe("Invalid Endpoint");
+        .then(({body}) => {
+            expect(body.msg).toBe("Invalid Endpoint");
         })
     })
 })
@@ -25,8 +25,8 @@ describe("GET /api", () => {
         return request(app)
         .get('/api')
         .expect(200)
-        .then((res) => {
-            expect(res.body).toMatchObject(endpoints);
+        .then(({body}) => {
+            expect(body).toMatchObject(endpoints);
         })
     })
     describe("/topics", () => {
@@ -34,9 +34,9 @@ describe("GET /api", () => {
             return request(app)
             .get('/api/topics')
             .expect(200)
-            .then((res) => {
-                expect(res.body.topics.length).not.toBe(0);
-                return res.body.topics.forEach((topic) => {
+            .then(({body}) => {
+                expect(body.topics.length).not.toBe(0);
+                return body.topics.forEach((topic) => {
                     expect(topic).toHaveProperty("slug", expect.any(String));
                     expect(topic).toHaveProperty("description", expect.any(String));
                 })
@@ -49,32 +49,32 @@ describe("GET /api", () => {
                 return request(app)
                 .get('/api/articles/1')
                 .expect(200)
-                .then((res) => {
-                    expect(res.body.article).toHaveProperty("author", expect.any(String));
-                    expect(res.body.article).toHaveProperty("title", expect.any(String));
-                    expect(res.body.article).toHaveProperty("article_id", expect.any(Number));
-                    expect(res.body.article).toHaveProperty("body", expect.any(String));
-                    expect(res.body.article).toHaveProperty("topic", expect.any(String));
-                    expect(res.body.article).toHaveProperty("created_at", expect.any(String));
-                    expect(res.body.article).toHaveProperty("votes", expect.any(Number));
-                    expect(res.body.article).toHaveProperty("article_img_url", expect.any(String));
-                    console.log(res.body);
+                .then(({body}) => {
+                    expect(body.article.article_id).toBe(1);
+                    expect(body.article).toHaveProperty("author", expect.any(String));
+                    expect(body.article).toHaveProperty("title", expect.any(String));
+                    expect(body.article).toHaveProperty("article_id", expect.any(Number));
+                    expect(body.article).toHaveProperty("body", expect.any(String));
+                    expect(body.article).toHaveProperty("topic", expect.any(String));
+                    expect(body.article).toHaveProperty("created_at", expect.any(String));
+                    expect(body.article).toHaveProperty("votes", expect.any(Number));
+                    expect(body.article).toHaveProperty("article_img_url", expect.any(String));
                 })
             })
             test("404: Should return \"Article ID not found\" if given valid but non-existent ID", () => {
                 return request(app)
                 .get('/api/articles/999')
                 .expect(404)
-                .then((res) => {
-                    expect(res.body.msg).toBe("Article ID not found");
+                .then(({body}) => {
+                    expect(body.msg).toBe("Article ID not found");
                 })
             })
             test("400: Should return \"Bad request\" if given an invalid ID.", () => {
                 return request(app)
                 .get('/api/articles/invalid_id')
                 .expect(400)
-                .then((res) => {
-                    expect(res.body.msg).toBe("Bad request");
+                .then(({body}) => {
+                    expect(body.msg).toBe("Bad request");
                 })
             })
         })
