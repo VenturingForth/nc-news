@@ -33,6 +33,7 @@ app.use((err, req, res, next) => {
 
 //Not Found (404) Error Handling
 app.use((err, req, res, next) => {
+    console.log(err);
     if(err.status === 404){
         res.status(404).send({msg: err.msg});
     } else {

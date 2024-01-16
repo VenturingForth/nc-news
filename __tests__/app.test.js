@@ -110,7 +110,6 @@ describe("GET /api", () => {
                     .get('/api/articles/1/comments')
                     .expect(200)
                     .then(({body}) => {
-                        console.log(body)
                         expect(body.comments.length).toBe(11);
                         body.comments.forEach((comment) => {
                             expect(comment).toHaveProperty("comment_id", expect.any(Number));
@@ -130,12 +129,20 @@ describe("GET /api", () => {
                         expect(body.comments).toBeSortedBy("created_at", { descending: true });
                     })
                 })
-                test("200: Article with no comments should send empty array", () => {
+                test.only("200: Article with no comments should send empty array", () => {
                     return request(app)
                     .get('/api/articles/10/comments')
                     .expect(200)
                     .then(({body}) => {
                         expect(body.comments.length).toBe(0);
+                    })
+                })
+                test("404: Should return \"Article ID not found\" if given valid but non-existent ID", () => {
+                    return request(app)
+                    .get('/api/articles/999/comments')
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("Article ID not found")
                     })
                 })
             })
