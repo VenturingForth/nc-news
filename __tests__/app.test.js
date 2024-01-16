@@ -58,6 +58,7 @@ describe("GET /api", () => {
                     expect(res.body.article).toHaveProperty("created_at", expect.any(String));
                     expect(res.body.article).toHaveProperty("votes", expect.any(Number));
                     expect(res.body.article).toHaveProperty("article_img_url", expect.any(String));
+                    console.log(res.body);
                 })
             })
             test("404: Should return \"Article ID not found\" if given valid but non-existent ID", () => {
@@ -66,6 +67,14 @@ describe("GET /api", () => {
                 .expect(404)
                 .then((res) => {
                     expect(res.body.msg).toBe("Article ID not found");
+                })
+            })
+            test("400: Should return \"Bad request\" if given an invalid ID.", () => {
+                return request(app)
+                .get('/api/articles/invalid_id')
+                .expect(400)
+                .then((res) => {
+                    expect(res.body.msg).toBe("Bad request");
                 })
             })
         })
