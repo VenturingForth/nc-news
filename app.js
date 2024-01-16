@@ -3,11 +3,14 @@ const app = express();
 
 const { getApi } = require("./controllers/api-controllers.js");
 const { getTopics } = require("./controllers/topics-controllers.js");
-const { getArticleById } = require("./controllers/articles-controllers.js");
+const { getArticleById,
+        getArticles } = require("./controllers/articles-controllers.js");
 
 app.get('/api', getApi);
 
 app.get('/api/topics', getTopics);
+
+app.get('/api/articles', getArticles);
 
 app.get('/api/articles/:article_id', getArticleById);
 
@@ -36,6 +39,7 @@ app.use((err, req, res, next) => {
 
 //Internal Error (500) Handling
 app.use((err, req, res, next) => {
+    console.log(err);
     res.status(500).send({msg: "Internal error: check your code."});
 })
 
