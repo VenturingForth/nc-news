@@ -104,6 +104,33 @@ describe("GET /api", () => {
                     expect(body.msg).toBe("Bad request");
                 })
             })
+            describe("/comments", () => {
+                test("200: Articles retrieved should be sorted by descending order by default.", () => {
+                    return request(app)
+                    .get('/api/articles/1/comments')
+                    .expect(200)
+                    .then(({body}) => {
+                        console.log(body)
+                        expect(body.comments.length).toBe(11);
+                        body.comments.forEach((comment) => {
+                            expect(comment).toHaveProperty("comment_id", expect.any(Number));
+                            expect(comment).toHaveProperty("votes", expect.any(Number));
+                            expect(comment).toHaveProperty("created_at", expect.any(String));
+                            expect(comment).toHaveProperty("author", expect.any(String));
+                            expect(comment).toHaveProperty("body", expect.any(String));
+                            expect(comment).toHaveProperty("article_id", expect.any(Number));
+                        })
+                    })
+                })
+                test("200: Comments should be sorted by most recent first.", () => {
+                    return request(app)
+                    .get('/api/articles/1/comments')
+                    .expect(200)
+                    .then(({body}) => {
+                        expect(body.comments).toBeSortedBy("created_at", { descending: true });
+                    })
+                })
+            })
         })
     })
 })
