@@ -105,7 +105,7 @@ describe("GET /api", () => {
                 })
             })
             describe("/comments", () => {
-                test("200: Articles retrieved should be sorted by descending order by default.", () => {
+                test("200: Comments should be retrieved with the necessary properties in an array of objects", () => {
                     return request(app)
                     .get('/api/articles/1/comments')
                     .expect(200)
@@ -128,6 +128,14 @@ describe("GET /api", () => {
                     .expect(200)
                     .then(({body}) => {
                         expect(body.comments).toBeSortedBy("created_at", { descending: true });
+                    })
+                })
+                test("200: Article with no comments should send empty array", () => {
+                    return request(app)
+                    .get('/api/articles/10/comments')
+                    .expect(200)
+                    .then(({body}) => {
+                        expect(body.comments.length).toBe(0);
                     })
                 })
             })
