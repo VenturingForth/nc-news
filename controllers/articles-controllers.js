@@ -1,5 +1,7 @@
+const { checkArticleIdExists } = require("../utils.js");
 const { fetchArticleById, 
-        fetchArticles } = require("../models/articles-models.js")
+        fetchArticles,
+        fetchArticleComments } = require("../models/articles-models.js")
 
 module.exports.getArticles = (req, res, next) => {
     return fetchArticles().then((articles) => {
@@ -12,4 +14,18 @@ module.exports.getArticleById = (req, res, next) => {
     return fetchArticleById(article_id).then((article) => {
         res.status(200).send({article})
     }).catch(next);
+}
+
+module.exports.getArticleComments = (req, res, next) => {
+    const { article_id } = req.params;
+    const checkIdExistsQuery = checkArticleIdExists(article_id);
+    const commentsQuery = fetchArticleComments(article_id);
+    const queryArray = [commentsQuery, checkIdExistsQuery];
+    return Promise.all(queryArray)
+    .then((response) => {
+        const comments = response[0]
+        res.status(200).send({comments});
+    }).catch((err) => {
+        next(err);
+    });
 }
