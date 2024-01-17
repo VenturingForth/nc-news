@@ -52,7 +52,9 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### POST `/api/articles/:article_id/comments`
 
-- ???
+- Bad `article_id`
+- Well formed `article_id` that doesn't exist in the database
+- Invalid `body` or `author` data types
 
 ### GET `/api/articles/:article_id/comments`
 

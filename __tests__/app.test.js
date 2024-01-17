@@ -110,7 +110,6 @@ describe("GET /api", () => {
                     .get('/api/articles/1/comments')
                     .expect(200)
                     .then(({body}) => {
-                        console.log(body);
                         expect(body.comments.length).toBe(11);
                         body.comments.forEach((comment) => {
                             expect(comment).toHaveProperty("comment_id", expect.any(Number));
@@ -144,6 +143,34 @@ describe("GET /api", () => {
                     .expect(404)
                     .then(({body}) => {
                         expect(body.msg).toBe("Article ID not found")
+                    })
+                })
+            })
+        })
+    })
+})
+
+describe("POST /api", () => {
+    describe("/articles", () => {
+        describe("/:article_id", () => {
+            describe("/comments", () => {
+                test("201: Should create a new post with test comment, and return the posted comment.", () => {
+                    const comment = {
+                        username: "butter_bridge",
+                        body: "I really miss chocolate Paddlepops, and they only cost 50c when I was a kid."
+                    }
+                    return request(app)
+                    .post('/api/articles/3/comments')
+                    .set('Content-Type', 'application/json')
+                    .send({ comment })
+                    .expect(201)
+                    .then(({body}) => {
+                        expect(body.comment.author).toBe(comment.username);
+                        expect(body.comment.body).toBe(comment.body);
+                        expect(body.comment.article_id).toBe(3);
+                        expect(body.comment.votes).toBe(0);
+                        expect(body.comment).toHaveProperty("comment_id", expect.any(Number));
+                        expect(body.comment).toHaveProperty("created_at", expect.any(String));
                     })
                 })
             })
