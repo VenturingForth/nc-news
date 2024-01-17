@@ -48,7 +48,6 @@ app.use((err, req, res, next) => {
 //Foreign Key Constraint (404) Error Handling
 app.use((err, req, res, next) => {
     const errDetail = err.detail.split(' ');
-    console.log(errDetail[errDetail.length - 1]);
     if(err.code === "23503" && errDetail[errDetail.length - 1] === `"articles".`){
         res.status(404).send({msg: "Article ID not found"});
     } else {
