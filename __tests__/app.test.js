@@ -107,9 +107,10 @@ describe("GET /api", () => {
             describe("/comments", () => {
                 test("200: Comments should be retrieved with the necessary properties in an array of objects", () => {
                     return request(app)
-                    .get('/api/articles/1/comments')
+                    .get('/api/articles/3/comments')
                     .expect(200)
                     .then(({body}) => {
+                        console.log(body);
                         expect(body.comments.length).toBe(11);
                         body.comments.forEach((comment) => {
                             expect(comment).toHaveProperty("comment_id", expect.any(Number));
@@ -129,7 +130,7 @@ describe("GET /api", () => {
                         expect(body.comments).toBeSortedBy("created_at", { descending: true });
                     })
                 })
-                test.only("200: Article with no comments should send empty array", () => {
+                test("200: Article with no comments should send empty array", () => {
                     return request(app)
                     .get('/api/articles/10/comments')
                     .expect(200)

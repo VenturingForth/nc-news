@@ -21,13 +21,11 @@ module.exports.getArticleComments = (req, res, next) => {
     const checkIdExistsQuery = checkArticleIdExists(article_id);
     const commentsQuery = fetchArticleComments(article_id);
     const queryArray = [commentsQuery, checkIdExistsQuery];
-    Promise.all(queryArray)
+    return Promise.all(queryArray)
     .then((response) => {
-        console.log(response);
         const comments = response[0]
         res.status(200).send({comments});
     }).catch((err) => {
-        console.log(err,  "<-- error over here!");
         next(err);
     });
 }
