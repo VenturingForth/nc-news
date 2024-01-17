@@ -34,3 +34,16 @@ module.exports.fetchArticleComments = (article_id) => {
             return rows;
         })
 }
+
+module.exports.createArticleComment = (article_id, comment) => {
+    queryArray = [comment.body, article_id, comment.username];
+    return db.query(`
+        INSERT INTO comments
+        (body, article_id, author)
+        VALUES
+        ($1, $2, $3)
+        RETURNING *;`, queryArray)
+    .then(({rows}) => {
+        return rows[0];
+    })
+}
