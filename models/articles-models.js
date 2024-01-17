@@ -57,6 +57,9 @@ module.exports.updateArticle = (article_id, inc_votes) => {
         RETURNING *
         `, queryArray)
     .then(({rows}) => {
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: "Article ID not found"});
+        }
         return rows[0];
     })
 }
