@@ -107,7 +107,7 @@ describe("GET /api", () => {
             describe("/comments", () => {
                 test("200: Comments should be retrieved with the necessary properties in an array of objects", () => {
                     return request(app)
-                    .get('/api/articles/3/comments')
+                    .get('/api/articles/1/comments')
                     .expect(200)
                     .then(({body}) => {
                         console.log(body);
