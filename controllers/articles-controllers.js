@@ -2,7 +2,8 @@ const { checkArticleIdExists } = require("../utils.js");
 const { fetchArticleById, 
         fetchArticles,
         fetchArticleComments,
-        createArticleComment } = require("../models/articles-models.js")
+        createArticleComment, 
+        updateArticle } = require("../models/articles-models.js")
 
 module.exports.getArticles = (req, res, next) => {
     return fetchArticles().then((articles) => {
@@ -34,5 +35,13 @@ module.exports.postArticleComment = (req, res, next) => {
     const { comment } = req.body;
     return createArticleComment(article_id, comment).then((postedComment) => {
         res.status(201).send({comment: postedComment});
+    }).catch(next);
+}
+
+module.exports.patchArticle = (req, res, next) => {
+    const { article_id } = req.params;
+    const { inc_votes } = req.body;
+    return updateArticle(article_id, inc_votes).then((article) => {
+        res.status(200).send({ article });
     }).catch(next);
 }

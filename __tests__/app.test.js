@@ -233,3 +233,27 @@ describe("POST /api", () => {
         })
     })
 })
+
+describe("PATCH /api", () => {
+    describe("/articles", () => {
+        describe("/:article_id", () => {
+            test("200: Should increment or decrement an article's vote property accordingly, returning the updated article.", () => {
+                return request(app)
+                .patch('/api/articles/1')
+                .set('Content-Type', 'application/json')
+                .send({ inc_votes : 10 })
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.article.article_id).toBe(1);
+                    expect(body.article.votes).toBe(110);
+                    expect(body.article).toHaveProperty("title", expect.any(String));
+                    expect(body.article).toHaveProperty("topic", expect.any(String));
+                    expect(body.article).toHaveProperty("author", expect.any(String));
+                    expect(body.article).toHaveProperty("body", expect.any(String));
+                    expect(body.article).toHaveProperty("created_at", expect.any(String));
+                    expect(body.article).toHaveProperty("article_img_url", expect.any(String))
+                })
+            })
+        })
+    })
+})
