@@ -71,6 +71,35 @@ describe("GET /api", () => {
                 expect(body.articles).toBeSortedBy('created_at', { descending: true });
             })
         })
+        describe("?topic", () => {
+            test("200: Should retrieve an array of article objects filtered by topic with the necessary properties when queried.", () => {
+                return request(app)
+                .get('/api/articles?topic=mitch')
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.articles.length).toBe(12);
+                    body.articles.forEach((article) => {
+                        expect(article.topic).toBe("mitch");
+                    })
+                })
+            })
+            test("200: Should retrieve an empty array if topic is in database, but is not associated with the article.", () => {
+                return request(app)
+                .get('/api/articles?topic=paper')
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.articles.length).toBe(0);
+                })
+            })
+            test("404: Should return 'Topic not found' if topic is not in the database.", () => {
+                return request(app)
+                .get('/api/articles?topic=joshua')
+                .expect(404)
+                .then(({body}) => {
+                    expect(body.msg).toBe("Topic not found");
+                })
+            })
+        })
         describe("/:article_id", () => {
             test("200: Should retrieve an article by id", () => {
                 return request(app)
@@ -230,7 +259,7 @@ describe("POST /api", () => {
                         expect(body.msg).toBe("Bad request");
                     })
                 })
-                test("401: Should return \"Unauthorised username\" if username doesn't exist in database.", () => {
+                test("404: Should return \"Username not found\" if username doesn't exist in database.", () => {
                     const comment = {
                         username: "freezypop",
                         body: "This comment will never land"
@@ -239,9 +268,9 @@ describe("POST /api", () => {
                     .post('/api/articles/3/comments')
                     .set('Content-Type', 'application/json')
                     .send({ comment })
-                    .expect(401)
+                    .expect(404)
                     .then(({body}) => {
-                        expect(body.msg).toBe("Unauthorised username");
+                        expect(body.msg).toBe("Username not found");
                     })
                 })
             })

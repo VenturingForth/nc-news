@@ -1,4 +1,5 @@
-const { checkArticleIdExists } = require("../utils.js");
+const { checkArticleIdExists,
+        checkTopicExists } = require("../utils.js");
 const { fetchArticleById, 
         fetchArticles,
         fetchArticleComments,
@@ -6,9 +7,20 @@ const { fetchArticleById,
         updateArticle } = require("../models/articles-models.js")
 
 module.exports.getArticles = (req, res, next) => {
-    return fetchArticles().then((articles) => {
-        res.status(200).send({articles});
-    }).catch(next);
+    if (Object.keys(req.query).length !== 0){
+        const { topic } = req.query;
+        const checkTopicExistsQuery = checkTopicExists(topic);
+        const articlesQuery = fetchArticles(topic);
+        const queryArray = [articlesQuery, checkTopicExistsQuery];
+        return Promise.all(queryArray)
+        .then((articles) => {
+            res.status(200).send({articles:articles[0]});
+        }).catch(next);
+    } else {
+        return fetchArticles().then((articles) => {
+            res.status(200).send({articles});
+        }).catch(next);
+    }
 }
 
 module.exports.getArticleById = (req, res, next) => {

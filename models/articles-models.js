@@ -1,15 +1,22 @@
 const db = require("../db/connection.js");
 
-module.exports.fetchArticles = () => {
-    return db.query(`
+module.exports.fetchArticles = (topic) => {
+    const queryValues = [];
+    let queryStr = `
         SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, (
             SELECT COUNT(*)::int FROM comments WHERE comments.article_id = articles.article_id) AS comment_count
         FROM articles
         LEFT JOIN comments ON articles.article_id = comments.article_id
-        GROUP BY articles.author, articles.title, articles.article_id
-        ORDER BY created_at DESC;
-        `).
-    then(({rows}) => {
+        `
+
+    if(topic){
+        queryStr += ` WHERE topic = $1`;
+        queryValues.push(topic);
+    }
+
+    queryStr += ` GROUP BY articles.author, articles.title, articles.article_id ORDER BY created_at DESC;`
+    
+    return db.query(queryStr, queryValues).then(({rows}) => {
         return rows;
     })
 }

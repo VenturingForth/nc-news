@@ -56,19 +56,12 @@ app.use((err, req, res, next) => {
 
 //Foreign Key Constraint (404) Error Handling
 app.use((err, req, res, next) => {
+    // console.log(err);
     const errDetail = err.detail.split(' ');
     if(err.code === "23503" && errDetail[errDetail.length - 1] === `"articles".`){
         res.status(404).send({msg: "Article ID not found"});
-    } else {
-        next(err);
-    }
-})
-
-//Unauthorised User (401) Error Handling
-app.use((err, req, res, next) => {
-    const errDetail = err.detail.split(' ');
-    if(err.code === "23503" && errDetail[errDetail.length - 1] === `"users".`){
-        res.status(401).send({msg: "Unauthorised username"});
+    } else if (err.code === "23503" && errDetail[errDetail.length - 1] === `"users".`){
+        res.status(404).send({msg: "Username not found"});
     } else {
         next(err);
     }
