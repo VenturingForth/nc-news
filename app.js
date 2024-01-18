@@ -6,7 +6,8 @@ const { getTopics } = require("./controllers/topics-controllers.js");
 const { getArticles,
         getArticleById,
         getArticleComments,
-        postArticleComment } = require("./controllers/articles-controllers.js");
+        postArticleComment,
+        patchArticle } = require("./controllers/articles-controllers.js");
 
 app.use(express.json());
 
@@ -21,6 +22,8 @@ app.get('/api/articles/:article_id', getArticleById);
 app.get('/api/articles/:article_id/comments', getArticleComments);
 
 app.post('/api/articles/:article_id/comments', postArticleComment);
+
+app.patch('/api/articles/:article_id', patchArticle);
 
 //Unavailable Route (404) Error Handling
 app.all('*', (req, res) => {
