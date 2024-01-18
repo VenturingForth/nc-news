@@ -9,6 +9,7 @@ const { getArticles,
         postArticleComment,
         patchArticle } = require("./controllers/articles-controllers.js");
 const { deleteComment } = require("./controllers/comments-controllers.js");
+const { getUsers } = require("./controllers/users-controllers.js")
 
 app.use(express.json());
 
@@ -27,6 +28,8 @@ app.post('/api/articles/:article_id/comments', postArticleComment);
 app.patch('/api/articles/:article_id', patchArticle);
 
 app.delete('/api/comments/:comment_id', deleteComment);
+
+app.get('/api/users', getUsers);
 
 //Unavailable Route (404) Error Handling
 app.all('*', (req, res) => {
