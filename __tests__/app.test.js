@@ -148,6 +148,22 @@ describe("GET /api", () => {
             })
         })
     })
+    describe("/users", () => {
+        test("200: Should retrieve an array of all users with the necessary properties", () => {
+            return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then(({body}) => {
+                console.log(body.users);
+                expect(body.users.length).toBe(4);
+                body.users.forEach((user) => {
+                    expect(user).toHaveProperty("username", expect.any(String));
+                    expect(user).toHaveProperty("name", expect.any(String));
+                    expect(user).toHaveProperty("avatar_url", expect.any(String));
+                })
+            })
+        })
+    })
 })
 
 describe("POST /api", () => {
