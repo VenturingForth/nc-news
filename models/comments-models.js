@@ -6,7 +6,6 @@ module.exports.removeComment = ((comment_id) => {
         WHERE comment_id = $1;
         `, [comment_id])
     .then(({rowCount}) => {
-        console.log(rowCount);
         if (rowCount === 0) {
             return Promise.reject({status: 404, msg: "Comment ID not found"});
         }
