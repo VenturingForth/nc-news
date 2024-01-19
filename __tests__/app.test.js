@@ -138,6 +138,15 @@ describe("GET /api", () => {
                 .get('/api/articles/1')
                 .expect(200)
                 .then(({body}) => {
+                    expect(body.article.article_id).toBe(1);
+                    expect(body.article).toHaveProperty("author", expect.any(String));
+                    expect(body.article).toHaveProperty("title", expect.any(String));
+                    expect(body.article).toHaveProperty("article_id", expect.any(Number));
+                    expect(body.article).toHaveProperty("body", expect.any(String));
+                    expect(body.article).toHaveProperty("topic", expect.any(String));
+                    expect(body.article).toHaveProperty("created_at", expect.any(String));
+                    expect(body.article).toHaveProperty("votes", expect.any(Number));
+                    expect(body.article).toHaveProperty("article_img_url", expect.any(String));
                     expect(body.article).toHaveProperty("comment_count", expect.any(Number));
                     expect(body.article.comment_count).toBe(11);
                 })
@@ -181,6 +190,14 @@ describe("GET /api", () => {
                     .expect(404)
                     .then(({body}) => {
                         expect(body.msg).toBe("Article ID not found")
+                    })
+                })
+                test("400: Should return 'Bad request' using existing error handles if given invalid article_id", () => {
+                    return request(app)
+                    .get('/api/articles/invalid_id/comments')
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("Bad request");
                     })
                 })
             })
