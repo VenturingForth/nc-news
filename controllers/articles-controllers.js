@@ -13,8 +13,8 @@ module.exports.getArticles = (req, res, next) => {
         const articlesQuery = fetchArticles(topic);
         const queryArray = [articlesQuery, checkTopicExistsQuery];
         return Promise.all(queryArray)
-        .then((articles) => {
-            res.status(200).send({articles:articles[0]});
+        .then((response) => {
+            res.status(200).send({articles:response[0]});
         }).catch(next);
     } else {
         return fetchArticles().then((articles) => {
