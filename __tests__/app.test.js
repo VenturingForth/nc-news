@@ -183,6 +183,14 @@ describe("GET /api", () => {
                         expect(body.msg).toBe("Article ID not found")
                     })
                 })
+                test("400: Should return 'Bad request' using existing error handles if given invalid article_id", () => {
+                    return request(app)
+                    .get('/api/articles/invalid_id/comments')
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("Bad request");
+                    })
+                })
             })
         })
     })
