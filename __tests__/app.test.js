@@ -71,6 +71,16 @@ describe("GET /api", () => {
                 expect(body.articles).toBeSortedBy('created_at', { descending: true });
             })
         })
+        test("200: Articles should be able to sort by any valid query", () => {
+            return request(app)
+            .get('/api/articles?sort_by=author')
+            .expect(200)
+            .then(({body}) => {
+                console.log(body);
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("author", { descending : true })
+            })
+        })
         describe("?topic", () => {
             test("200: Should retrieve an array of article objects filtered by topic with the necessary properties when queried.", () => {
                 return request(app)

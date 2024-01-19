@@ -7,17 +7,17 @@ const { fetchArticleById,
         updateArticle } = require("../models/articles-models.js")
 
 module.exports.getArticles = (req, res, next) => {
-    if (Object.keys(req.query).length !== 0){
-        const { topic } = req.query;
+    const { topic, sort_by, order } = req.query;
+    if (topic){
         const checkTopicExistsQuery = checkTopicExists(topic);
-        const articlesQuery = fetchArticles(topic);
+        const articlesQuery = fetchArticles(topic, sort_by, order);
         const queryArray = [articlesQuery, checkTopicExistsQuery];
         return Promise.all(queryArray)
         .then((response) => {
             res.status(200).send({articles:response[0]});
         }).catch(next);
     } else {
-        return fetchArticles().then((articles) => {
+        return fetchArticles(topic, sort_by, order).then((articles) => {
             res.status(200).send({articles});
         }).catch(next);
     }
