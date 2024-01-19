@@ -5,7 +5,7 @@ module.exports.fetchArticles = (topic = null, sort_by="created_at", order = "des
     const validSortCriteria = [ 'title', 'topic', 'author', 'created_at', 'votes' ];
     const validOrderCriteria = [ 'asc', 'desc' ]
     if(!validSortCriteria.includes(sort_by)){
-        return Reject.promise({status: 400, msg: "Bad request"})
+        return Promise.reject({status: 400, msg: "Bad request"})
     }
     if(!validOrderCriteria.includes(order)){
         order = 'desc';
