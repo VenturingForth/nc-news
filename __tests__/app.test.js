@@ -71,6 +71,40 @@ describe("GET /api", () => {
                 expect(body.articles).toBeSortedBy('created_at', { descending: true });
             })
         })
+        test("200: Articles should be able to sort by any valid query", () => {
+            return request(app)
+            .get('/api/articles?sort_by=author')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("author", { descending : true })
+            })
+        })
+        test("200: Articles should be able to sort ascending or descending", () => {
+            return request(app)
+            .get('/api/articles?sort_by=title&order=asc')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("title");
+            })
+        })
+        test("200: Articles should return default sorting order and criteria if given invalid order.", () => {
+            return request(app)
+            .get('/api/articles?order=ascending')
+            .then(({body}) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("created_at", { descending:true })
+            })
+        })
+        test("400: Should return 'Bad request' if given an invalid sort query.", () => {
+            return request(app)
+            .get('/api/articles?sort_by=invalid')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("Bad request");
+            })
+        })
         describe("?topic", () => {
             test("200: Should retrieve an array of article objects filtered by topic with the necessary properties when queried.", () => {
                 return request(app)

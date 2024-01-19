@@ -1,7 +1,15 @@
 const db = require("../db/connection.js");
 
-module.exports.fetchArticles = (topic) => {
+module.exports.fetchArticles = (topic = null, sort_by="created_at", order = "desc") => {
     const queryValues = [];
+    const validSortCriteria = [ 'title', 'topic', 'author', 'created_at', 'votes' ];
+    const validOrderCriteria = [ 'asc', 'desc' ]
+    if(!validSortCriteria.includes(sort_by)){
+        return Promise.reject({status: 400, msg: "Bad request"})
+    }
+    if(!validOrderCriteria.includes(order)){
+        order = 'desc';
+    }
     let queryStr = `
         SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, (
             SELECT COUNT(*)::int FROM comments WHERE comments.article_id = articles.article_id) AS comment_count
@@ -14,7 +22,7 @@ module.exports.fetchArticles = (topic) => {
         queryValues.push(topic);
     }
 
-    queryStr += ` GROUP BY articles.author, articles.title, articles.article_id ORDER BY created_at DESC;`
+    queryStr += ` GROUP BY articles.author, articles.title, articles.article_id ORDER BY ${sort_by} ${order};`
     
     return db.query(queryStr, queryValues).then(({rows}) => {
         return rows;
