@@ -2,7 +2,7 @@ const db = require("../db/connection.js");
 
 module.exports.fetchArticles = (topic = null, sort_by="created_at", order = "desc") => {
     const queryValues = [];
-    const validSortCriteria = [ 'title', 'topic', 'author', 'created_at', 'votes' ];
+    const validSortCriteria = [ 'title', 'topic', 'author', 'created_at', 'votes', 'comment_count' ];
     const validOrderCriteria = [ 'asc', 'desc' ]
     if(!validSortCriteria.includes(sort_by)){
         return Promise.reject({status: 400, msg: "Bad request"})
