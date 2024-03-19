@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use('/api', apiRouter);
 
-app.delete('/api/comments/:comment_id', deleteComment);
+// app.delete('/api/comments/:comment_id', deleteComment);
 
 app.get('/api/users', getUsers);
 
