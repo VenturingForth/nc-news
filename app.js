@@ -1,38 +1,13 @@
 const express = require('express');
 const app = express();
+const apiRouter = require('./routes/api-router.js');
 const cors = require('cors');
-
-const { getApi } = require("./controllers/api-controllers.js");
-const { getTopics } = require("./controllers/topics-controllers.js");
-const { getArticles,
-        getArticleById,
-        getArticleComments,
-        postArticleComment,
-        patchArticle } = require("./controllers/articles-controllers.js");
-const { deleteComment } = require("./controllers/comments-controllers.js");
-const { getUsers } = require("./controllers/users-controllers.js")
 
 app.use(cors());
 
 app.use(express.json());
 
-app.get('/api', getApi);
-
-app.get('/api/topics', getTopics);
-
-app.get('/api/articles', getArticles);
-
-app.get('/api/articles/:article_id', getArticleById);
-
-app.get('/api/articles/:article_id/comments', getArticleComments);
-
-app.post('/api/articles/:article_id/comments', postArticleComment);
-
-app.patch('/api/articles/:article_id', patchArticle);
-
-app.delete('/api/comments/:comment_id', deleteComment);
-
-app.get('/api/users', getUsers);
+app.use('/api', apiRouter);
 
 //Unavailable Route (404) Error Handling
 app.all('*', (req, res) => {
