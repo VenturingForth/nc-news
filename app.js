@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use('/api', apiRouter);
 
-app.get('/api/topics', getTopics);
+// app.get('/api/topics', getTopics);
 
 app.get('/api/articles', getArticles);
 
