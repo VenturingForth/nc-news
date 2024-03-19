@@ -251,6 +251,19 @@ describe("GET /api", () => {
                 })
             })
         })
+        describe("/:username", () => {
+            test("200: Should retrieve a user object with the necessary properties", () => {
+                return request(app)
+                .get('/api/users/butter_bridge')
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.username).toBe("butter_bridge");
+                    expect(body).toHaveProperty("username", expect.any(String));
+                    expect(body).toHaveProperty("avatar_url", expect.any(String));
+                    expect(body).toHaveProperty("name", expect.any(String));
+                })
+            })
+        })
     })
 })
 
