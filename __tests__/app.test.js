@@ -257,7 +257,6 @@ describe("GET /api", () => {
                 .get('/api/users/butter_bridge')
                 .expect(200)
                 .then(({body}) => {
-                    console.log(body);
                     expect(body.user.username).toBe("butter_bridge");
                     expect(body.user).toHaveProperty("username", expect.any(String));
                     expect(body.user).toHaveProperty("avatar_url", expect.any(String));
@@ -265,7 +264,12 @@ describe("GET /api", () => {
                 })
             })
             test("404: Should return 'Username not found' if given non-existent username", () => {
-                
+                return request(app)
+                .get('/api/users/freezypop')
+                .expect(404)
+                .then(({body}) => {
+                    expect(body.msg).toBe("Username not found", expect.any(String));
+                })
             })
         })
     })
