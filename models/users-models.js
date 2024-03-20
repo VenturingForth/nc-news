@@ -8,3 +8,13 @@ module.exports.fetchUsers = () => {
         return rows;
     })
 }
+
+module.exports.fetchUserByUsername = (username) => {
+    const queryValues = [username]
+    return db.query(`
+    SELECT * FROM users WHERE username = $1;
+    `, queryValues)
+    .then(({rows}) => {
+        return rows[0];
+    })
+}

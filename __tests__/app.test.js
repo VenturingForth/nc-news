@@ -257,11 +257,15 @@ describe("GET /api", () => {
                 .get('/api/users/butter_bridge')
                 .expect(200)
                 .then(({body}) => {
-                    expect(body.username).toBe("butter_bridge");
-                    expect(body).toHaveProperty("username", expect.any(String));
-                    expect(body).toHaveProperty("avatar_url", expect.any(String));
-                    expect(body).toHaveProperty("name", expect.any(String));
+                    console.log(body);
+                    expect(body.user.username).toBe("butter_bridge");
+                    expect(body.user).toHaveProperty("username", expect.any(String));
+                    expect(body.user).toHaveProperty("avatar_url", expect.any(String));
+                    expect(body.user).toHaveProperty("name", expect.any(String));
                 })
+            })
+            test("404: Should return 'Username not found' if given non-existent username", () => {
+                
             })
         })
     })
