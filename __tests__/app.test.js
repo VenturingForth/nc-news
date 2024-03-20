@@ -411,6 +411,26 @@ describe("PATCH /api", () => {
             })
         })
     })
+    describe("/comments", () => {
+        describe("/:comment_id", () => {
+            test("200: Should increment or decrement a comment's vote property acordingly, returning the updated comment", () => {
+                return request(app)
+                .patch('/api/comments/1')
+                .set('Content-Type', 'application/json')
+                .send({ inc_votes: 10 })
+                .expect(200)
+                .then(({body}) => {
+                    console.log(body);
+                    expect(body.comment.comment_id).toBe(1);
+                    expect(body.comment.votes).toBe(26);
+                    expect(body.comment).toHaveProperty("body", expect.any(String));
+                    expect(body.comment).toHaveProperty("article_id", expect.any(Number));
+                    expect(body.comment).toHaveProperty("author", expect.any(String));
+                    expect(body.comment).toHaveProperty("created_at", expect.any(String));
+                })
+            })
+        })
+    })
 })
 
 describe("DELETE /api", () => {
