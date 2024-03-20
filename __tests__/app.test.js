@@ -251,6 +251,27 @@ describe("GET /api", () => {
                 })
             })
         })
+        describe("/:username", () => {
+            test("200: Should retrieve a user object with the necessary properties", () => {
+                return request(app)
+                .get('/api/users/butter_bridge')
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.user.username).toBe("butter_bridge");
+                    expect(body.user).toHaveProperty("username", expect.any(String));
+                    expect(body.user).toHaveProperty("avatar_url", expect.any(String));
+                    expect(body.user).toHaveProperty("name", expect.any(String));
+                })
+            })
+            test("404: Should return 'Username not found' if given non-existent username", () => {
+                return request(app)
+                .get('/api/users/freezypop')
+                .expect(404)
+                .then(({body}) => {
+                    expect(body.msg).toBe("Username not found", expect.any(String));
+                })
+            })
+        })
     })
 })
 
