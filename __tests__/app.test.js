@@ -445,7 +445,6 @@ describe("PATCH /api", () => {
                 .send({ inc_votes: 10 })
                 .expect(404)
                 .then(({body}) => {
-                    console.log(body);
                     expect(body.msg).toBe('Comment ID not found');
                 })
             })
