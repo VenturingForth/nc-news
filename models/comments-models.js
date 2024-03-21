@@ -22,6 +22,9 @@ module.exports.updateComment = (comment_id, inc_votes) => {
         RETURNING *
     `, queryArray)
     .then(({rows}) => {
+        if (rows.length === 0){
+            return Promise.reject({status: 404, msg: "Comment ID not found"});
+        }
         return rows[0];
     })
 }

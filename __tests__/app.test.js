@@ -420,13 +420,33 @@ describe("PATCH /api", () => {
                 .send({ inc_votes: 10 })
                 .expect(200)
                 .then(({body}) => {
-                    console.log(body);
                     expect(body.comment.comment_id).toBe(1);
                     expect(body.comment.votes).toBe(26);
                     expect(body.comment).toHaveProperty("body", expect.any(String));
                     expect(body.comment).toHaveProperty("article_id", expect.any(Number));
                     expect(body.comment).toHaveProperty("author", expect.any(String));
                     expect(body.comment).toHaveProperty("created_at", expect.any(String));
+                })
+            })
+            test("400: Bad request should be handled by existing errors for invalid comment_id", () => {
+                return request(app)
+                .patch('/api/comments/one')
+                .set('Content-Type', 'application/json')
+                .send({ inc_votes: 10 })
+                .expect(400)
+                .then(({body}) => {
+                    expect(body.msg).toBe('Bad request');
+                })
+            })
+            test("404: Should return 'Comment ID not found' if given valid but nonexistent comment_id", () => {
+                return request(app)
+                .patch('/api/comments/999')
+                .set('Content-Type', 'application/json')
+                .send({ inc_votes: 10 })
+                .expect(404)
+                .then(({body}) => {
+                    console.log(body);
+                    expect(body.msg).toBe('Comment ID not found');
                 })
             })
         })
